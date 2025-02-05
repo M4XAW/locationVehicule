@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Stage index{% endblock %}
+
+{% block body %}
+    <h1>Stages</h1>
+
+    <table class="table table-striped">
+        <thead>
+            <tr class="table-dark">
+                <th>Libelle</th>
+                <th>DateDebut</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for stage in stages %}
+            <tr>
+                <td>{{ stage.libelle }}</td>
+                <td>{{ stage.dateDebut ? stage.dateDebut|date('Y-m-d') : '' }}</td>
+                <td>
+                    <a class="btn btn-outline-success" href="{{ path('app_stage_show', {'id': stage.id}) }}">show</a>
+                    <a class="btn btn-outline-success" href="{{ path('app_stage_edit', {'id': stage.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-outline-success" href="{{ path('app_stage_new') }}">Create new</a>
+{% endblock %}

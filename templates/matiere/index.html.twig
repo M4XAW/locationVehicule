@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Matiere index{% endblock %}
+
+{% block body %}
+    <h1 class="text-center">Matieres</h1>
+
+    <table class="table table-striped">
+        <thead>
+            <tr class="table-dark">
+                <th>Libelle</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for matiere in matieres %}
+            <tr>
+                <td>{{ matiere.libelle }}</td>
+                <td>
+                    <a class="btn btn-outline-success" href="{{ path('app_matiere_show', {'id': matiere.id}) }}">show</a>
+                    <a class="btn btn-outline-success" href="{{ path('app_matiere_edit', {'id': matiere.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-outline-success" href="{{ path('app_matiere_new') }}">Create new</a>
+{% endblock %}
