@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reservations index{% endblock %}
+
+{% block body %}
+    <h1>Reservations</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Vehicule</th>
+                <th>DateDebut</th>
+                <th>DateFin</th>    
+                <th>PrixTotal</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for reservation in reservations %}
+            <tr>
+                <td>{{ reservation.id }}</td>
+                <td>{{ reservation.vehicule }}</td>
+                <td>{{ reservation.dateDebut ? reservation.dateDebut|date('Y-m-d') : '' }}</td>
+                <td>{{ reservation.dateFin ? reservation.dateFin|date('Y-m-d') : '' }}</td>
+                <td>{{ reservation.prixTotal }}</td>
+                <td>
+                    <a href="{{ path('app_reservations_show', {'id': reservation.id}) }}">Voir</a>
+                    <a href="{{ path('app_reservations_edit', {'id': reservation.id}) }}">Modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_reservations_new') }}">Ajouter</a>
+{% endblock %}

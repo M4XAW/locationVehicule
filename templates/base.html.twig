@@ -13,20 +13,23 @@
         {% endblock %}
     </head>
     <body>
-        <header class="p-4 mb-3 bg-secondary">
-            
-            <a class="btn btn-success" href="{{path('app_home_index')}}">Home</a>
-            {% if app.user %}
-                {% if is_granted("ROLE_ADMIN") %} |
-                    <a class="btn btn-success" href="{{path('app_reservations_index')}}">Réservations</a>
-                    <a class="btn btn-success" href="{{path('app_vehicules_index')}}">véhicules</a>
-                {% endif %}
+        <header class="d-flex justify-content-between p-4 mb-3 bg-secondary">
+            <a class="btn btn-success" href="{{path('app_vehicules_index')}}">Accueil</a>
+            <nav>
+                {% if app.user %}
+                    <span>Connecté en tant que {{app.user.getPrenom}}</span>
+                    {% if is_granted("ROLE_ADMIN") %} |
+                        <a class="btn btn-success" href="{{path('app_reservations_index')}}">Réservations</a>
+                        <a class="btn btn-success" href="{{path('app_vehicules_index')}}">Véhicules</a>
+                        <a class="btn btn-success" href="{{path('app_user_index')}}">Gestion utilisateur</a>
+                    {% endif %}
 
-                <a class="btn btn-danger" href="{{path('app_logout')}}">Logout</a>
-            {% else %}
-                <a class="btn btn-success" href="{{path('app_login')}}">Login</a>
-                <a class="btn btn-success" href="{{path('app_register')}}">Register</a>
-            {% endif %}
+                    <a class="btn btn-danger" href="{{path('app_logout')}}">Se déconnecter</a>
+                {% else %}
+                        <a class="btn btn-success" href="{{path('app_login')}}">Se connecter</a>
+                        <a class="btn btn-success" href="{{path('app_register')}}">S'inscrire</a>
+                {% endif %}
+            </nav>
         </header>
         {% for msg in app.session.flashbag.get('error') %}
             <div class="alert alert-danger">{{ msg }}</div>

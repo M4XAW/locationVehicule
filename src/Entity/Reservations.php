@@ -26,6 +26,12 @@ class Reservations
     #[ORM\Column]
     private ?float $prixTotal = null;
 
+    #[ORM\ManyToOne(inversedBy: 'reservations')]
+    private ?Vehicules $reservation = null;
+
+    #[ORM\ManyToOne(inversedBy: 'user')]
+    private ?User $user = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,6 +81,30 @@ class Reservations
     public function setPrixTotal(float $prixTotal): static
     {
         $this->prixTotal = $prixTotal;
+
+        return $this;
+    }
+
+    public function getReservation(): ?Vehicules
+    {
+        return $this->reservation;
+    }
+
+    public function setReservation(?Vehicules $reservation): static
+    {
+        $this->reservation = $reservation;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

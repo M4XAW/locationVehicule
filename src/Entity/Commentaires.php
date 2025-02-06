@@ -20,6 +20,9 @@ class Commentaires
     #[ORM\Column]
     private ?int $note = null;
 
+    #[ORM\ManyToOne(inversedBy: 'commentaires')]
+    private ?Vehicules $commentaires = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -45,6 +48,18 @@ class Commentaires
     public function setNote(int $note): static
     {
         $this->note = $note;
+
+        return $this;
+    }
+
+    public function getCommentaires(): ?Vehicules
+    {
+        return $this->commentaires;
+    }
+
+    public function setCommentaires(?Vehicules $commentaires): static
+    {
+        $this->commentaires = $commentaires;
 
         return $this;
     }

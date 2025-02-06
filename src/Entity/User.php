@@ -3,18 +3,18 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
-#[Vich\Uploadable]
-class User implements UserInterface, PasswordAuthenticatedUserInterface//, Serializable
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -42,6 +42,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface//, Seria
     #[Assert\NotBlank()]
     #[Assert\Length(min: 2, max: 30, minMessage: "Minimun 2 caractères acceptés")]
     private ?string $prenom = null;
+
+    /**
+     * @var Collection<int, Reservations>
+     */
+    #[ORM\OneToMany(targetEntity: Reservations::class, mappedBy: 'user')]
+    private Collection $user;
+
+    public function __construct()
+    {
+        $this->user = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -126,6 +137,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface//, Seria
     public function setPrenom(string $prenom): static
     {
         $this->prenom = $prenom;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reservations>
+     */
+    public function getUser(): Collection
+    {
+        return $this->user;
+    }
+
+    public function addUser(Reservations $user): static
+    {
+        if (!$this->user->contains($user)) {
+            $this->user->add($user);
+            $user->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(Reservations $user): static
+    {
+        if ($this->user->removeElement($user)) {
+            // set the owning side to null (unless already changed)
+            if ($user->getUser() === $this) {
+                $user->setUser(null);
+            }
+        }
 
         return $this;
     }

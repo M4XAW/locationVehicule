@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Vehicules{% endblock %}
+
+{% block body %}
+    <h1>Vehicules</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ vehicule.id }}</td>
+            </tr>
+            <tr>
+                <th>Marque</th>
+                <td>{{ vehicule.marque }}</td>
+            </tr>
+            <tr>
+                <th>Immatriculation</th>
+                <td>{{ vehicule.immatriculation }}</td>
+            </tr>
+            <tr>
+                <th>Prix</th>
+                <td>{{ vehicule.prix }}</td>
+            </tr>
+            <tr>
+                <th>Statut</th>
+                <td>{{ vehicule.statut }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_vehicules_index') }}">Retour</a>
+
+    {% if is_granted("ROLE_ADMIN") %}
+        <a href="{{ path('app_vehicules_edit', {'id': vehicule.id}) }}">Modifier</a>
+    {% endif %}
+    <a href="{{ path('app_reservations_new', {'id': vehicule.id}) }}">Réserver</a>
+
+    {{ include('vehicules/_delete_form.html.twig') }}
+{% endblock %}

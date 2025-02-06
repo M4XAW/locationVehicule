@@ -1,20 +1,77 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello VehiculesController!{% endblock %}
+{% block title %}Vehicules{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <h1>Listes des véhicules</h1>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <input type="text" id="search" placeholder="Rechercher un véhicule">
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/picau/Documents/Ecole/3e/Symphony/locationVehicule/src/Controller/VehiculesController.php</code></li>
-        <li>Your template at <code>C:/Users/picau/Documents/Ecole/3e/Symphony/locationVehicule/templates/vehicules/index.html.twig</code></li>
-    </ul>
-</div>
+    <script>
+        document.getElementById('search').addEventListener('input', function() {
+            let search = this.value.toLowerCase();
+            let rows = document.querySelectorAll('tbody tr');
+
+            rows.forEach(row => {
+                let text = row.innerText.toLowerCase();
+                if (text.indexOf(search) === -1) {
+                    row.style.display = 'none';
+                } else {
+                    row.style.display = '';
+                }
+            });
+        });
+    </script>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Marque</th>
+                <th>Immatriculation</th>
+                <th>Prix</th>
+                <th>Statut</th>
+                <th>Note</th>
+                {% if app.user %}
+                    <th>actions</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+        {% for vehicule in vehicules %}
+            <tr>
+                <td>{{ vehicule.id }}</td>
+                <td>{{ vehicule.marque }}</td>
+                <td>{{ vehicule.immatriculation }}</td>
+                <td>{{ vehicule.prix }}</td>
+                <td>
+                    {% if vehicule.statut == 1 %}
+                        Disponible
+                    {% else %}
+                        Indisponible
+                    {% endif %}
+                </td>
+                <td>4/5</td>
+                {% if app.user %}
+                    <td>
+                        <a href="{{ path('app_vehicules_show', {'id': vehicule.id}) }}">Voir</a>
+                        {% if is_granted("ROLE_ADMIN") %}
+                            <a href="{{ path('app_vehicules_edit', {'id': vehicule.id}) }}">Modifier</a>
+                        {% endif %}
+                    </td>
+                {% endif %}
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">Aucun véhicule trouvé</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% if app.user %}
+        {% if is_granted("ROLE_ADMIN") %}
+            <a class="btn btn-primary" href="{{ path('app_vehicules_new') }}">Ajouter un nouveau véhicule</a>
+        {% endif %}
+    {% endif %}
 {% endblock %}
