@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+    <h2 class="text-center">Réservations</h2>
+    {# {% for stage in stages %}
+        <p>
+            <strong>{{ stage.libelle }}</strong> le {{ stage.dateDebut | date("d/m/Y") }}
+            <div>
+                {% for mat in stage.matieres %}
+                    <div>{{ mat.libelle }} enseigné par {{ mat.prof.prenom }} </div>
+                {% endfor %}
+            </div>
+        </p>
+    {% endfor %} #}
+{% endblock %}

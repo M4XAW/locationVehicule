@@ -9,20 +9,39 @@
         {% block stylesheets %}
         {% endblock %}
 
-        {% block javascripts %}
-        
+        {% block javascripts %}        
         {% endblock %}
     </head>
     <body>
         <header class="p-4 mb-3 bg-secondary">
-            <a class="btn btn-success" href="{{path('app_stage_index')}}">Home</a>
-            <a class="btn btn-success" href="{{path('app_prof_index')}}">Prof</a>
-            <a class="btn btn-success" href="{{path('app_matiere_index')}}">Matière</a>
-            <a class="btn btn-success" href="{{path('app_stage_index')}}">Stage</a>
-            <a class="btn btn-success" href="{{path('app_stagiaire_index')}}">Stagiaire</a>
+            
+            <a class="btn btn-success" href="{{path('app_home_index')}}">Home</a>
+            {% if app.user %}
+                {% if is_granted("ROLE_ADMIN") %} |
+                    <a class="btn btn-success" href="{{path('app_reservations_index')}}">Réservations</a>
+                    <a class="btn btn-success" href="{{path('app_vehicules_index')}}">véhicules</a>
+                {% endif %}
+
+                <a class="btn btn-danger" href="{{path('app_logout')}}">Logout</a>
+            {% else %}
+                <a class="btn btn-success" href="{{path('app_login')}}">Login</a>
+                <a class="btn btn-success" href="{{path('app_register')}}">Register</a>
+            {% endif %}
         </header>
-        <main class="container-fluid">
+        {% for msg in app.session.flashbag.get('error') %}
+            <div class="alert alert-danger">{{ msg }}</div>
+        {% endfor %}
+        
+        {% for msg in app.session.flashbag.get('success') %}
+            <div class="alert alert-success">{{ msg }}</div>
+        {% endfor %}
+
+        <main class="container-fluid mb-5">
             {% block body %}{% endblock %}
         </main>
+
+        <footer class="p-3 mt-5 bg-secondary text-center text-light">
+            Location de véhicules - 2025
+        </footer>
     </body>
 </html>
